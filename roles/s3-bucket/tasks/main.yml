@@ -1,0 +1,14 @@
+---
+# tasks file for s3-bucket
+
+- name: create s3 bucket with non-public access
+  cloudformation:
+    stack_name: "{{ s3_stack_name }}"
+    state: present
+    region: "{{ default_region }}"
+    disable_rollback: true
+    # on_create_failure: delete
+    template: "{{role_path}}/files/s3-bucket.yaml"
+    template_parameters:
+      BucketNameParameter: "{{ s3_bucket_name }}"
+  register: cft_result

@@ -1,0 +1,46 @@
+---
+#####################################################################################################
+#
+# Usage:
+#
+# ansible-playbook retract.yml -e "deployment_env=aabg"
+# ansible-playbook retract.yml -e "deployment_env=non-prod"
+# ansible-playbook retract.yml -e "deployment_env=prod"
+#
+# ansible-playbook retract.yml -e "deployment_env=aabg nocyberark=1"
+# ansible-playbook retract.yml -e "deployment_env=non-prod nocyberark=1"
+# ansible-playbook retract.yml -e "deployment_env=prod nocyberark=1"
+#
+#####################################################################################################
+
+- hosts: localhost
+  remote_user: root
+
+  vars:
+    - deployment_env: "aabg"      # must be overwritten with an inline variable. eg: ... -e "deployment_env=non-prod"
+
+  tasks:
+    - include_vars: "./environments/{{ deployment_env }}/vars_specific.yml"   # variables specific to wdl-gcs-ingestion
+    - include_vars: "./environments/{{ deployment_env }}/main.yml"            # tags used in wdl-gcs-ingestion
+    - include_vars: "./environments/{{ deployment_env }}/vars_tags.yml"       # tags used in wdl-gcs-ingestion
+    - include_vars: "./environments/vars_common.yml"                          # common vars same in all environments
+
+    - block:
+#######################################################################################################
+      - name: execute wdl gcs ingestion specific roles
+        include_role:
+          name: "{{role_item}}"
+        loop:
+          - ws----configure-aws         # not executed if nocyberark is defined
+          - glue-retract
+        loop_control:
+          loop_var: role_item
+
+
+#######################################################################################################
+      always:
+#######################################################################################################
+        - name: clean up
+          include_role:
+            name: ws----cleanup-aws      # not executed if nocyberark is defined
+#######################################################################################################

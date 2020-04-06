@@ -1,0 +1,42 @@
+AWSTemplateFormatVersion: '2010-09-09'
+# Sample CFN YAML to demonstrate creating a glue job
+# Parameters section contains names that are substituted in the Resources section
+Parameters:
+  GlueIAMRole:
+    Type: String
+    Description: IAM role for Glue
+  JobScriptLocation:
+    Type: String
+  GlueJobname:
+    Type: String
+  GlueWorkerType:
+    Type: String
+    Description: "AWS Glue Worker Type"
+    AllowedValues:
+    - Standard
+    - G.1X
+    - G.2X
+  GlueNumberOfWorkers:
+    Type: Number
+    Description: "AWS Glue Number of Worker"
+  # JobLibraryLocation:
+  #   Type: String
+Description: "AWS Glue Job Resources"
+Resources:
+  GlueJob:
+    Type: AWS::Glue::Job
+    Properties:
+      Command:
+        Name: glueetl
+        ScriptLocation:
+          !Ref JobScriptLocation
+      DefaultArguments:
+        "--job-bookmark-option": 'job-bookmark-enable'
+        # "--extra-py-files": !Ref JobLibraryLocation
+      ExecutionProperty:
+        MaxConcurrentRuns: 2
+      MaxRetries: 0
+      NumberOfWorkers: !Ref GlueNumberOfWorkers
+      Name: !Ref GlueJobname
+      Role: !Ref GlueIAMRole
+      WorkerType: !Ref GlueWorkerType

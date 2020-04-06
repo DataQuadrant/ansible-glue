@@ -1,0 +1,29 @@
+---
+# tasks file for glue-job
+
+- name: process glue job script as a jinja template
+  template:
+    src: "{{role_path}}/templates/join_and_relationalize.py"
+    dest: "{{role_path}}/files/{{deployment_env_short}}/join_and_relationalize.py"
+
+- name: copy script to s3
+  aws_s3:
+    bucket: "{{ default_s3_bucket }}"
+    object: /wdl-glue-jobs/join_and_relationalize.py
+    src: "{{role_path}}/files/{{deployment_env_short}}/join_and_relationalize.py"
+    mode: put
+
+- set_fact:
+    job_script_location: "s3://{{ default_s3_bucket }}//wdl-glue-jobs/join_and_relationalize.py"
+
+- debug:
+    msg: "{{ job_script_location }}"
+
+# Create an AWS Glue job
+# - aws_glue_job:
+#     job_name: "{{ glue_job_name }}"
+#     command_script_location: "{{ job_script_location }}"
+#     name: "{{ glue_job_name }}"
+#     allocated_capacity:
+#     role: "{{ glue_iam_role }}"
+#     state: present

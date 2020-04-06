@@ -1,0 +1,27 @@
+---
+# tasks file for iam-create
+
+
+
+- name: create iam role
+  cloudformation:
+    stack_name: "{{ iam_role_stack_name }}"
+    state: present
+    region: "{{ default_region }}"
+    disable_rollback: true
+    # on_create_failure: delete
+    template: "{{role_path}}/templates/cft-iam-role.yaml"
+    template_parameters:
+      RoleNameParameter: "{{ iam_role_parameter }}"
+  register: cft_result
+
+
+  # set the default_glue_iam_role to the arn of the new created role
+- debug:
+    msg: "{{ cft_result }}"
+
+- set_fact:
+    default_glue_iam_role: "{{ cft_result.stack_outputs.RoleArn }}"
+
+- debug:
+    msg: "{{ default_glue_iam_role }}"

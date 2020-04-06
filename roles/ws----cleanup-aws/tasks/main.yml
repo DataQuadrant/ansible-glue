@@ -1,0 +1,21 @@
+---
+# tasks file for ws----cleanup-aws
+
+- block:
+
+  - name: remove dlansible_credential json file
+    file:
+      path: "~/.aws/dlansible_user.json"
+      state: absent
+
+  - name: remove aws config file
+    file:
+      path: "~/.aws/config"
+      state: absent
+
+  - name: remove aws credentials file
+    file:
+      path: "~/.aws/credentials"
+      state: absent
+
+  when: nocyberark is not defined

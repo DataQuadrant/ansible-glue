@@ -1,0 +1,32 @@
+---
+# tasks file for glue-retract
+
+- name: force deletion of all files and buckets
+  s3_bucket:
+    name: "{{ item_s3 }}"
+    state: absent
+    force: yes
+  ignore_errors: true
+  loop:
+    - "{{ default_s3_bucket }}"
+    - "{{ default_landingzone_bucket }}"
+    - "{{ default_proczone_bucket }}"
+    - "{{ default_curatedzone_bucket }}"
+  loop_control:
+    loop_var: item_s3
+
+- name: remove all cloudformation stacks
+  cloudformation:
+    stack_name: "{{ item_cft }}"
+    state: absent
+  ignore_errors: true
+  loop:
+    - "{{ glue_database_stack_name }}"
+    - "{{ glue_crawler_stack_name }}"
+    - "md-labs-glue-role-stack"
+    - "{{ default_s3_bucket }}-stack"
+    - "{{ default_landingzone_bucket }}-stack"
+    - "{{ default_proczone_bucket }}-stack"
+    - "{{ default_curatedzone_bucket }}-stack"
+  loop_control:
+    loop_var: item_cft

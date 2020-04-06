@@ -1,0 +1,18 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: AWS CloudFormation Template for Vistra EAP Glue Security Configuration
+Parameters:
+  SecConfigName:
+    Type: String
+    Description: Glue Security Config Name
+  KmsKeyArn:
+    Type: String
+    Description: S3 KMS Key ARN
+Resources:
+  GlueSecConfig:
+    Type: 'AWS::Glue::SecurityConfiguration'
+    Properties:
+      EncryptionConfiguration:
+        S3Encryptions:
+          - S3EncryptionMode: SSE-KMS
+            KmsKeyArn: !Ref KmsKeyArn
+      Name: !Ref SecConfigName

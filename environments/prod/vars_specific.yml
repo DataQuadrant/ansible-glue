@@ -1,0 +1,9 @@
+  deployment_env: prod
+  deployment_env_short: prod
+  deployment_env_short_02: Prod
+  application_name: wdl-glue
+
+  aws_account: 834697678616
+  aws_region: us-east-1
+
+  sg_cidr: "10.163.0.0/16"

@@ -1,0 +1,91 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Parameters:
+    RoleNameParameter:
+        Type: String
+        Description: name of the IAM role
+
+Resources:
+  MDLabsGlueRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      RoleName: !Ref RoleNameParameter
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - glue.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: /
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+        - arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole
+        - arn:aws:iam::aws:policy/service-role/AWSGlueServiceNotebookRole
+
+# # attaching an inline policy to the role
+#   MDLabsGluePolicy:
+#     Type: AWS::IAM::Policy
+#     Properties:
+#       PolicyName: md-labs-glue-policy-01
+#       PolicyDocument:
+#         Version: "2012-10-17"
+#         Statement:
+#         - Action:
+#           - autoscaling:Describe*
+#           - budgets:ViewBudget
+#           - cloudtrail:DescribeTrails
+#           - cloudtrail:GetTrailStatus
+#           - cloudwatch:Describe*
+#           - cloudwatch:Get*
+#           - cloudwatch:List*
+#           - dynamodb:list*
+#           - dynamodb:describe*
+#           - ec2:Describe*
+#           - ec2:Get*
+#           - ecs:Describe*
+#           - ecs:List*
+#           - elasticache:Describe*
+#           - elasticache:List*
+#           - elasticfilesystem:DescribeTags
+#           - elasticfilesystem:DescribeFileSystems
+#           - elasticloadbalancing:Describe*
+#           - elasticmapreduce:List*
+#           - elasticmapreduce:Describe*
+#           - es:ListTags
+#           - es:ListDomainNames
+#           - es:DescribeElasticsearchDomains
+#           - kinesis:List*
+#           - kinesis:Describe*
+#           - logs:Get*
+#           - logs:Describe*
+#           - logs:FilterLogEvents
+#           - logs:TestMetricFilter
+#           - rds:Describe*
+#           - rds:List*
+#           - route53:List*
+#           - s3:GetBucketTagging
+#           - s3:ListAllMyBuckets
+#           - ses:Get*
+#           - sns:List*
+#           - sns:Publish
+#           - sqs:GetQueueAttributes
+#           - sqs:ListQueues
+#           - sqs:ReceiveMessage
+#           - support:*
+#           - tag:getResources
+#           - tag:getTagKeys
+#           - tag:getTagValues
+#           Effect: Allow
+#           Resource: "*"
+#       Roles: [!Ref MDLabsGlueRole]
+
+Outputs:
+  RoleId:
+    Description: The logical ID of the IAM role
+    Value: !Ref MDLabsGlueRole
+  RoleArn:
+    Description: The ARN of the IAM role
+    Value: !GetAtt [MDLabsGlueRole, Arn]

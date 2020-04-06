@@ -1,0 +1,100 @@
+---
+#####################################################################################################
+#
+# Usage:
+#
+# ansible-playbook main.yml -e "deployment_env=aabg"
+# ansible-playbook main.yml -e "deployment_env=non-prod"
+# ansible-playbook main.yml -e "deployment_env=prod"
+#
+# ansible-playbook main.yml -e "deployment_env=aabg nocyberark=1"
+# ansible-playbook main.yml -e "deployment_env=non-prod nocyberark=1"
+# ansible-playbook main.yml -e "deployment_env=prod nocyberark=1"
+#
+#####################################################################################################
+
+- hosts: localhost
+  remote_user: root
+
+  vars:
+    - deployment_env: "aabg"     # must be overwritten with an inline variable. eg: ... -e "deployment_env=non-prod"
+
+  tasks:
+    - include_vars: "./environments/{{ deployment_env }}/vars_specific.yml"   # variables specific to wdl-gcs-ingestion
+    - include_vars: "./environments/{{ deployment_env }}/main.yml"            # tags used in wdl-gcs-ingestion
+    - include_vars: "./environments/{{ deployment_env }}/vars_tags.yml"       # tags used in wdl-gcs-ingestion
+    - include_vars: "./environments/vars_common.yml"                          # common vars same in all environments
+
+    - block:
+#######################################################################################################
+      - include_role:
+          name: ws----configure-aws         # not executed if nocyberark is
+
+
+#######################################################################################################
+# prepare IAM roles, S3 buckets and files for this project
+
+      # create iam roles
+      - import_role:
+          name: iam-create
+        vars:
+          iam_role_stack_name: "md-labs-glue-role-stack"
+          iam_role_parameter: "{{ default_glue_iam_role_name }}"
+
+      # create s3 buckets
+      - include_role:
+          name: s3-bucket
+        vars:
+          s3_stack_name: "{{ item_s3_bucket }}-stack"
+          s3_bucket_name: "{{ item_s3_bucket }}"
+        loop:
+          - "{{ default_s3_bucket }}"
+          - "{{ default_landingzone_bucket }}"
+          - "{{ default_proczone_bucket }}"
+          - "{{ default_curatedzone_bucket }}"
+        loop_control:
+          loop_var: item_s3_bucket
+
+      - name: copy files to s3
+        s3_sync:
+          bucket: "{{ default_landingzone_bucket }}"
+          file_root: "{{ playbook_dir }}/artifacts/legislators"
+          key_prefix: "legislators"
+
+# #######################################################################################################
+
+      - import_role:
+          name: glue-database
+        vars:
+          glue_database_stack_name: "{{ glue_database_stack_name }}"
+          glue_database_name: "{{ glue_database_name }}"
+
+      - import_role:
+          name: glue-crawler
+        vars:
+          glue_crawler_stack_name: "{{ glue_crawler_stack_name }}"
+          glue_iam_role: "{{ default_glue_iam_role }}"
+          crawler_name: "{{ glue_crawler_name }}"
+          s3_targets_location: "{{ glue_crawler_s3_location }}"
+          glue_database_name: "{{ glue_database_name }}"
+
+      # start glue crawler
+      - name: start glue job
+        shell: "aws glue start-crawler --name {{ crawler_name }}"
+        register: shell_result
+
+
+      - import_role:
+          name: glue-job
+        vars:
+          glue_iam_role: "{{ default_glue_iam_role }}"
+          glue_job_name: "md-labs-glue-job-legistators-example"
+          glue_worker_type: "G.2X"
+          glue_number_workers: 10
+
+      always:
+#######################################################################################################
+        - name: clean up
+          include_role:
+            name: ws----cleanup-aws      # not executed if nocyberark is defined
+#######################################################################################################

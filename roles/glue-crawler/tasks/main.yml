@@ -1,0 +1,20 @@
+---
+# tasks file for glue-crawler
+
+- name: create glue crawler cloud formation stack
+  cloudformation:
+    stack_name: "{{ glue_crawler_stack_name }}"
+    state: present
+    region: "{{ default_region }}"
+    disable_rollback: true
+    # on_create_failure: delete
+    template: "{{role_path}}/files/glue-crawler.yaml"
+    template_parameters:
+      GlueIAMRole: "{{ glue_iam_role }}"
+      CrawlerName: "{{ crawler_name }}"
+      S3TargetsLocation: "{{ s3_targets_location }}"
+      GlueDatabaseName: "{{ glue_database_name }}"
+    tags: "{{ default_tags }}"
+  register: cft_result
+
+

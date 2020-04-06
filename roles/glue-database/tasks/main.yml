@@ -1,0 +1,16 @@
+---
+# tasks file for glue-create
+
+
+- name: create glue database cloud formation stack
+  cloudformation:
+    stack_name: "{{ glue_database_stack_name }}"
+    state: present
+    region: "{{ default_region }}"
+    disable_rollback: true
+    # on_create_failure: delete
+    template: "{{role_path}}/files/glue-database.yaml"
+    template_parameters:
+      GlueDatabaseName: "{{ glue_database_name }}"
+    tags: "{{ default_tags }}"
+  register: cft_result

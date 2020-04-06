@@ -1,0 +1,122 @@
+---
+# BusinessUnit:
+#   Default: Vistra
+#   Description: Business unit
+#   Type: String
+#   AllowedValues: 
+#   - Vistra
+#   - Luminant
+#   - TXU
+tag_BusinessUnit: Vistra
+
+# ApplicationCode:
+#   Default: EAP
+#   Description: Application code
+#   Type: String
+tag_ApplicationCode: EAP
+
+# ApplicationName:
+#   Default: EAP
+#   Description: Application name
+#   Type: String
+tag_ApplicationName: EAP
+
+# Environment:
+#   Default: non-production
+#   Description: Environment
+#   Type: String
+#   AllowedValues: 
+#   - non-production
+#   - development
+#   - testing
+#   - staging
+#   - production
+tag_Environment: non-production
+
+# Owner:
+#   Default: Suresh Irukulapati
+#   Description: Product owner
+#   Type: String
+tag_Owner: Suresh Irukulapati
+
+# DataClassification:
+#   Default: Restricted
+#   Description: Classification of data
+#   Type: String
+#   AllowedValues: 
+#   - Restricted
+#   - Non-Restricted
+tag_DataClassification: Non-Restricted
+
+# PCI:
+#   Default: false
+#   Description: PCI compliant data
+#   Type: String
+#   AllowedValues: 
+#   - true
+#   - false
+tag_PCI: false
+
+# SOX:
+#   Default: false
+#   Description: SOX compliant data
+#   Type: String
+#   AllowedValues: 
+#   - true
+#   - false
+tag_SOX: false
+
+# NERCCIP:
+#   Default: false
+#   Description: NERCCIP compliant data
+#   Type: String
+#   AllowedValues: 
+#   - true
+#   - false
+tag_NERCCIP: false
+
+# ArchiveDate:
+#   Default: 12/12/2099
+#   Description: Archive date
+#   Type: String
+tag_ArchiveDate: 12/12/2099
+
+# Monitoring:
+#   Default: false
+#   Description: Monitoring
+#   Type: String
+#   AllowedValues: 
+#   - true
+#   - false
+tag_Monitoring: false
+
+# ApplicationCriticality:
+#   Default: business_critical
+#   Type: String
+#   Description: Application Criticality
+#   AllowedValues:
+#     - mission_critical
+#     - business_critical
+#     - business_operations
+#     - administrative
+tag_ApplicationCriticality: business_critical
+
+# Project:
+#   Default: EAP
+#   Description: Project Name
+#   Type: String
+tag_Project: EAP
+
+# Contact:
+#   Default: basheer.shaik@vistraenergy.com,DANIEL.SPENCE@vistraenergy.com
+#   Type: String
+tag_Contact: "basheer.shaik@vistraenergy.com daniel.spence@vistraenergy.com"
+
+# CMDB:
+#   Default: false
+#   Description: DMDB - option to add automatically into Config Management DB
+#   AllowedValues:
+#     - false
+#     - true
+#   Type: String
+tag_CMDB: false

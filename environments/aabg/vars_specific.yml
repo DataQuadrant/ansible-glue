@@ -1,0 +1,12 @@
+---
+
+  deployment_env: aabg
+  deployment_env_short: aabg
+  deployment_env_short_02: AABG
+  application_name: wdl-glue
+
+
+  aws_account: "868024899531"
+  aws_region: "us-east-2"
+
+  sg_cidr: "3.0.0.0/8"

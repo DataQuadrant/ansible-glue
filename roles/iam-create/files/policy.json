@@ -1,0 +1,37 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": [
+                "lakeformation:GetDataAccess",
+                "lakeformation:GrantPermissions"
+            ],
+            "Resource": "*",
+            "Effect": "Allow",
+            "Sid": "LakeformationWorkflow"
+        },
+        {
+            "Condition": {
+                "StringEquals": {
+                    "lambda:Principal": "glue.amazonaws.com"
+                }
+            },
+            "Action": [
+                "lambda:InvokeFunction"
+            ],
+            "Resource": "arn:aws:lambda:*:*:function:eap*",
+            "Effect": "Allow",
+            "Sid": "LambdaAccess4Glue"
+        },
+        {
+            "Action": [
+                "iam:GetRole",
+                "iam:PassRole"
+            ],
+            "Resource": [
+                "arn:aws:iam::868024899531:role/datalake.NonProd.dlGlueCrawler.svcrole"
+            ],
+            "Effect": "Allow"
+        }
+    ]
+}

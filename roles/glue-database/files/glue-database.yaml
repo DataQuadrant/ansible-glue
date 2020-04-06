@@ -1,0 +1,16 @@
+AWSTemplateFormatVersion: '2010-09-09'
+# Sample CFN YAML to demonstrate creating a Datacatalog DB
+#
+# Parameters section contains names that are substituted in the Resources section
+# These parameters are the names the resources created in the Data Catalog
+Parameters:
+  GlueDatabaseName:
+    Type: String
+Resources:
+  GlueDB:
+    Type: AWS::Glue::Database
+    Properties:
+     DatabaseInput:
+      Name: !Ref GlueDatabaseName
+      Description: "Glue Data catalog DB"
+     CatalogId: !Ref AWS::AccountId

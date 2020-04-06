@@ -1,0 +1,34 @@
+AWSTemplateFormatVersion: '2010-09-09'
+# Sample CFN YAML to demonstrate creating a crawler
+#
+# Parameters section contains names that are substituted in the Resources section
+# These parameters are the names the resources created in the Data Catalog
+Parameters:
+  GlueIAMRole:
+    Type: String
+    Description: IAM role for Glue
+# The name of the crawler to be created
+  CrawlerName:
+    Type: String
+  S3TargetsLocation:
+    Type: String
+  GlueDatabaseName:
+    Type: String
+Resources:
+   #Create a crawler to crawl from S3 bucket
+  GlueCrawler:
+   Type: AWS::Glue::Crawler
+   Properties:
+    Name: !Ref CrawlerName
+    Description: AWS Glue crawler to crawl from s3 location
+    #Schedule: none, use default run-on-demand
+    DatabaseName: !Ref GlueDatabaseName
+    Role: !Ref GlueIAMRole
+    Targets:
+      S3Targets:
+        # S3 bucket location
+        - Path: !Ref S3TargetsLocation
+    SchemaChangePolicy:
+      UpdateBehavior: "UPDATE_IN_DATABASE"
+      DeleteBehavior: "LOG"
+    Configuration: "{\"Version\":1.0,\"CrawlerOutput\":{\"Partitions\":{\"AddOrUpdateBehavior\":\"InheritFromTable\"},\"Tables\":{\"AddOrUpdateBehavior\":\"MergeNewColumns\"}}}"

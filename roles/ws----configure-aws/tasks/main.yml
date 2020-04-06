@@ -1,0 +1,55 @@
+---
+# tasks file for ws----configure-aws
+# Fetch user credentials and setup the AWS session
+- block:
+# Playbook to fetch aws creds from cyberark and configure session
+
+# - name: fetch aws creds from cyberark and configure session
+#   hosts: localhost
+#   sudo: no
+#   tasks:
+
+# Fetch user credentials and setup the AWS session
+
+    - name: fetch user credentials from CyberArk API
+      uri:
+        url: "{{ environment_credential_url }}"
+        return_content: yes
+        validate_certs: yes
+      register: dlansible_api_credential
+      no_log: true
+
+    - name: remove aws config file
+      file:
+        path: "~/.aws/config"
+        state: absent
+
+    - name: remove aws credentials file
+      file:
+        path: "~/.aws/credentials"
+        state: absent
+
+    - name: parse AWS credential from CyberARK JSON response
+      set_fact:
+        access_key_id: "{{(dlansible_api_credential.content|from_json).AWSAccessKeyID}}"
+        secret_access_key: "{{(dlansible_api_credential.content|from_json).Content}}"
+      no_log: true
+
+    - name: configure aws
+      copy:
+        content: "[default]\nregion={{ default_region }}\noutput=json"
+        dest: "~/.aws/config"
+      no_log: true
+
+    - name: generate aws credential file
+      copy:
+        content: "[default]\naws_access_key_id={{ access_key_id }}\naws_secret_access_key={{ secret_access_key }}"
+        dest: "~/.aws/credentials"
+      no_log: true
+
+  # # Stage the CFTs in an S3 bucket to reference in subsequent roles and playbooks
+
+  # - name: copy cloudformation templates directory up to s3 bucket
+  #   shell: "aws s3 cp {{ buildout_directory }} s3://{{ default_s3_bucket }} --recursive"
+  
+  when: nocyberark is not defined

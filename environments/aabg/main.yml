@@ -1,0 +1,54 @@
+---
+# Vars for dl-non-prod environment
+
+buildout_directory: "~/buildout/"
+default_region: us-east-2
+default_s3_bucket: eap-aabg-s3-artifacts
+default_landingzone_bucket: eap-aabg-s3-landingzone
+default_proczone_bucket: eap-aabg-s3-proczone
+default_curatedzone_bucket: eap-aabg-s3-curatedzone
+default_publishedzone_bucket: eap-aabg-s3-publishedzone
+default_log_bucket: eap-aabg-s3-logbucket
+default_s3_kms_key: "a56a5da5-01c4-4a6d-a5f8-bb3b4f37247b"
+environment_credential_url: "https://aim.vistraenergy.com/AIMWebService/api/Accounts?AppID=AIM_EAP-Datalake_NonProd&Safe=APP_EAPDATALAKE_NonProd&Object=app_eapdatalake_dlansible"
+environment_prefix: aabg
+
+# Default EC2 values
+
+default_ec2_keypair: "Cloud-Datalake-NonProd-Jenkins-KeyPair"
+
+# Default VPC values, note that public and DMZ subnets are not used in EAP
+
+default_vpc_id: "vpc-0536d6e718c0f8ba4"
+default_vpc_private_subnet_a: "subnet-01747a9730d177c4b"
+default_vpc_private_subnet_b: "subnet-02bb448f61df34f9f"
+default_vpc_private_subnet_c: "subnet-05ee6041a2513a6a6"
+
+# Default IAM roles
+
+default_glue_iam_role: "arn:aws:iam::{{ aws_account }}:role/datalake.NonProd.dlGlueCrawler.svcrole"
+default_step_function_iam_role: "arn:aws:iam::{{ aws_account }}:role/datalake.NonProd.dlstepfunction.svcrole"
+default_dms_s3_access_role: "arn:aws:iam::{{ aws_account }}:role/datalake.NonProd.dldms.svcrole"
+default_emr_cluster_iam_role: "arn:aws:iam::{{ aws_account }}:role/datalake.NonProd.dlemr.svcrole"
+default_emr_instance_profile: "arn:aws:iam::{{ aws_account }}:instance-profile/datalake.NonProd.dlemrInstanceProfile.svcrole"
+default_emr_autoscaling_role: "arn:aws:iam::{{ aws_account }}:role/datalake.NonProd.dlemrInstanceProfile.svcrole"
+default_eks_cluster_role: ""
+default_eks_node_instance_profile: ""
+
+# These are the default tags for this environment tier provided by Vistra
+# Do not modify these unless absolutely neccessary
+
+default_tags:
+  BusinessUnit: "AABG"
+  ApplicationCode: "EAP"
+  ApplicationName: "EAP"
+  Environment: "non-production"
+  Owner: "Marian Dumitrascu"
+  DataClassification: "Restricted"
+  PCI: "false"
+  SOX: "false"
+  NERCCIP: "false"
+  ArchiveDate: "12/12/2099"
+  DefaultMonitoring: "false"
+
+
