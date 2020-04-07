@@ -7,8 +7,16 @@ from awsglue.utils import getResolvedOptions
 from pyspark.context import SparkContext
 from awsglue.context import GlueContext
 from awsglue.job import Job
+import boto3
 
 glueContext = GlueContext(SparkContext.getOrCreate())
+
+region_name = "us-east-2"
+crawler_name = "wdl-aabg-glue-crawler"
+
+# run the crawler
+glue_client = boto3.client('glue', region_name=region_name)
+glue_client.start_crawler(Name=crawler_name)
 
 # catalog: database and table names
 db_name = "wdl-aabg-glue-database"
@@ -17,9 +25,9 @@ tbl_membership = "memberships_json"
 tbl_organization = "organizations_json"
 
 # output s3 and temp directories
-output_history_dir = "s3://eap-aabg-s3-landingzone/output-dir/legislator_history"
-output_lg_single_dir = "s3://eap-aabg-s3-landingzone/output-dir/legislator_single"
-output_lg_partitioned_dir = "s3://eap-aabg-s3-landingzone/output-dir/legislator_part"
+output_history_dir = "s3://eap-aabg-s3-curatedzone/legislators/legislator_history"
+output_lg_single_dir = "s3://eap-aabg-s3-curatedzone/legislators/legislator_single"
+output_lg_partitioned_dir = "s3://eap-aabg-s3-curatedzone/legislators/legislator_part"
 
 
 # Create dynamic frames from the source tables

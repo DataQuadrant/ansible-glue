@@ -241,3 +241,4 @@ $RECYCLE.BIN/
 z-*
 z_*
 
+roles/glue-job/files/join_and_relationalize.py

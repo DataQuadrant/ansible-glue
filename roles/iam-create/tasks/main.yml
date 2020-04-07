@@ -10,7 +10,7 @@
     region: "{{ default_region }}"
     disable_rollback: true
     # on_create_failure: delete
-    template: "{{role_path}}/templates/cft-iam-role.yaml"
+    template: "{{role_path}}/files/cft-iam-role.yaml"
     template_parameters:
       RoleNameParameter: "{{ iam_role_parameter }}"
   register: cft_result
