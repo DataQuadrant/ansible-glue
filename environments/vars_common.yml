@@ -14,6 +14,6 @@
     glue_crawler_stack_name: "{{ application_prefix }}-{{ deployment_env_short }}-glue-crawler-stack"
     glue_crawler_name: "{{ application_prefix }}-{{ deployment_env_short }}-glue-crawler"
     glue_crawler_s3_location: " s3://eap-aabg-s3-landingzone/legislators"
-    glue_job_output_s3_location: "s3://eap-aabg-s3-landingzone/output-dir"
+    glue_job_output_s3_location: "s3://eap-aabg-s3-curatedzone/legislators"
 
 
