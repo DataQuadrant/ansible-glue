@@ -5,5 +5,3 @@
 
   aws_account: 733224590010
   aws_region: us-east-1
-
-  sg_cidr: "10.163.0.0/16"
