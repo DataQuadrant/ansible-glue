@@ -21,6 +21,7 @@
     state: absent
   ignore_errors: true
   loop:
+    - "md-labs-glue-job-legistators-example-stack"
     - "{{ glue_database_stack_name }}"
     - "{{ glue_crawler_stack_name }}"
     - "md-labs-glue-role-stack"

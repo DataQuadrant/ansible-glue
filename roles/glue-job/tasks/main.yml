@@ -4,26 +4,37 @@
 - name: process glue job script as a jinja template
   template:
     src: "{{role_path}}/templates/join_and_relationalize.py"
-    dest: "{{role_path}}/files/{{deployment_env_short}}/join_and_relationalize.py"
+    dest: "{{role_path}}/files/join_and_relationalize.py"
 
 - name: copy script to s3
   aws_s3:
     bucket: "{{ default_s3_bucket }}"
     object: /wdl-glue-jobs/join_and_relationalize.py
-    src: "{{role_path}}/files/{{deployment_env_short}}/join_and_relationalize.py"
+    src: "{{role_path}}/files/join_and_relationalize.py"
     mode: put
 
 - set_fact:
-    job_script_location: "s3://{{ default_s3_bucket }}//wdl-glue-jobs/join_and_relationalize.py"
+    job_script_location: "s3://{{ default_s3_bucket }}/wdl-glue-jobs/join_and_relationalize.py"
 
 - debug:
     msg: "{{ job_script_location }}"
 
-# Create an AWS Glue job
-# - aws_glue_job:
-#     job_name: "{{ glue_job_name }}"
-#     command_script_location: "{{ job_script_location }}"
-#     name: "{{ glue_job_name }}"
-#     allocated_capacity:
-#     role: "{{ glue_iam_role }}"
-#     state: present
+- name: create glue etl job cloud formation stack
+  cloudformation:
+    stack_name: "{{ glue_job_stack_name }}"
+    state: present
+    region: "{{ default_region }}"
+    disable_rollback: true
+    template: "{{role_path}}/files/join_and_relationalize.py"
+    template_parameters:
+      GlueIAMRole: "{{ glue_iam_role }}"
+      JobScriptLocation: "{{ job_script_location }}"
+      # JobLibraryLocation: "{{ job_library_location }}"
+      GlueJobname: "{{ glue_job_name }}"
+      GlueWorkerType: "{{ glue_worker_type }}"
+      GlueNumberOfWorkers: "{{ glue_number_workers }}"
+    tags: "{{ default_tags }}"
+  register: cft_result
+
+- debug:
+    msg: "{{ cft_result }}"

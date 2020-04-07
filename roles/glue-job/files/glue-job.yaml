@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
-# Sample CFN YAML to demonstrate creating a glue job
+# CFN YAML for creating a glue job
 # Parameters section contains names that are substituted in the Resources section
 Parameters:
   GlueIAMRole:
@@ -21,7 +21,7 @@ Parameters:
     Description: "AWS Glue Number of Worker"
   # JobLibraryLocation:
   #   Type: String
-Description: "AWS Glue Job Resources"
+  #   Description: "AWS Glue Job Resources"
 Resources:
   GlueJob:
     Type: AWS::Glue::Job

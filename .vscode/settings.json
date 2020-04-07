@@ -1,3 +1,4 @@
 {
-    "templateFinder.extension.activated": true
+    "templateFinder.extension.activated": true,
+    "python.pythonPath": "/Users/marian.dumitrascu/opt/anaconda3/bin/python"
 }

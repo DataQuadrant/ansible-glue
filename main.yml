@@ -30,7 +30,6 @@
       - include_role:
           name: ws----configure-aws         # not executed if nocyberark is
 
-
 #######################################################################################################
 # prepare IAM roles, S3 buckets and files for this project
 
@@ -62,7 +61,7 @@
           key_prefix: "legislators"
 
 # #######################################################################################################
-
+# deploy: Glue database, crawler and job
       - import_role:
           name: glue-database
         vars:
@@ -78,15 +77,15 @@
           s3_targets_location: "{{ glue_crawler_s3_location }}"
           glue_database_name: "{{ glue_database_name }}"
 
-      # start glue crawler
-      - name: start glue job
-        shell: "aws glue start-crawler --name {{ crawler_name }}"
-        register: shell_result
-
+      # # start glue crawler
+      # - name: start glue job
+      #   shell: "aws glue start-crawler --name {{ crawler_name }}"
+      #   register: shell_result
 
       - import_role:
           name: glue-job
         vars:
+          glue_job_stack_name: md-labs-glue-job-legistators-example-stack
           glue_iam_role: "{{ default_glue_iam_role }}"
           glue_job_name: "md-labs-glue-job-legistators-example"
           glue_worker_type: "G.2X"

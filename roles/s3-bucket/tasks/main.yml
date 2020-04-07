@@ -12,3 +12,7 @@
     template_parameters:
       BucketNameParameter: "{{ s3_bucket_name }}"
   register: cft_result
+
+- debug:
+    msg: "{{ cft_result }}"
+

@@ -10,7 +10,7 @@ https://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-samples-l
 It creates and deploy following items:
 - IAM role for Glue
 - S3 buckets
-- legislators sample json files
+- Legislators sample json files
 - Glue Database
 - Glue Crawler
 - Glue Python Job

@@ -17,4 +17,7 @@
     tags: "{{ default_tags }}"
   register: cft_result
 
+- debug:
+    msg: "{{ cft_result }}"
+
 
