@@ -37,7 +37,7 @@
       - import_role:
           name: iam-create
         vars:
-          iam_role_stack_name: "md-labs-glue-role-stack"
+          iam_role_stack_name: "{{ application_prefix }}-{{ deployment_env_short }}-iam-role-stack"
           iam_role_parameter: "{{ default_glue_iam_role_name }}"
 
       # create s3 buckets
@@ -65,13 +65,13 @@
       - import_role:
           name: glue-database
         vars:
-          glue_database_stack_name: "{{ glue_database_stack_name }}"
+          glue_database_stack_name: "{{ glue_database_name }}-stack"
           glue_database_name: "{{ glue_database_name }}"
 
       - import_role:
           name: glue-crawler
         vars:
-          glue_crawler_stack_name: "{{ glue_crawler_stack_name }}"
+          glue_crawler_stack_name: "{{ glue_crawler_name }}-stack"
           glue_iam_role: "{{ default_glue_iam_role }}"
           crawler_name: "{{ glue_crawler_name }}"
           s3_targets_location: "{{ glue_crawler_s3_location }}"
@@ -85,11 +85,21 @@
       - import_role:
           name: glue-job
         vars:
-          glue_job_stack_name: md-labs-glue-job-legistators-example-stack
+          glue_job_stack_name: "{{ application_prefix }}-{{ deployment_env_short }}-glue-job-stack"
           glue_iam_role: "{{ default_glue_iam_role }}"
-          glue_job_name: "md-labs-glue-job-legistators-example"
+          glue_job_name: "{{ glue_job_name }}"
           glue_worker_type: "G.2X"
           glue_number_workers: 10
+
+
+      - name: start the glue job
+        shell: "aws glue start-job-run --job-name {{ glue_job_name }}"
+        register: shell_result
+
+      - debug:
+          msg: "{{ shell_result }}"
+
+
 
       always:
 #######################################################################################################

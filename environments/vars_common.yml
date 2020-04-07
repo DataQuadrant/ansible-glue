@@ -2,18 +2,12 @@
 
     application_prefix: "wdl"
 
-    s3_bucket_landingzone: eap-aabg-s3-landingzone
-    s3_bucket_curated: eap-aabg-s3-curated
-    s3_bucket_artifacts: eap-aabg-s3-artifacts
-
     default_glue_iam_role_name: "datalake.{{ deployment_env_short_02 }}.dlGlueCrawler.svcrole"
 
-    glue_database_stack_name: "{{ application_prefix }}-{{ deployment_env_short }}-glue-database-stack"
     glue_database_name: "{{ application_prefix }}-{{ deployment_env_short }}-glue-database"
-
-    glue_crawler_stack_name: "{{ application_prefix }}-{{ deployment_env_short }}-glue-crawler-stack"
     glue_crawler_name: "{{ application_prefix }}-{{ deployment_env_short }}-glue-crawler"
-    glue_crawler_s3_location: " s3://eap-aabg-s3-landingzone/legislators"
-    glue_job_output_s3_location: "s3://eap-aabg-s3-curatedzone/legislators"
+    glue_crawler_s3_location: " s3://{{ default_landingzone_bucket }}/legislators"
+    glue_job_output_s3_location: "s3://{{ default_curatedzone_bucket }}/legislators"
+    glue_job_name: "{{ application_prefix }}-{{ deployment_env_short }}-glue-job-01"
 
 

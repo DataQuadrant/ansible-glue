@@ -13,3 +13,5 @@ aws s3 sync s3://awsglue-datasets/examples/us-legislators/all /Users/marian.dumi
 aws s3 cp s3://WholeBucket LocalFolder --recursive
 
 aws s3 cp /Users/marian.dumitrascu/Dropbox/Work/current/VISTRA/wdl-glue/z-temp/legislators s3://eap-aabg-s3-landingzone/legislators --recursive
+
+aws glue start-job-run --job-name md-labs-glue-job-legistators-example
