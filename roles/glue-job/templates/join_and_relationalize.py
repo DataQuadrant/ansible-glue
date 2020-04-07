@@ -7,8 +7,16 @@ from awsglue.utils import getResolvedOptions
 from pyspark.context import SparkContext
 from awsglue.context import GlueContext
 from awsglue.job import Job
+import boto3
 
 glueContext = GlueContext(SparkContext.getOrCreate())
+
+region_name = "{{ default_region }}"
+crawler_name = "{{ glue_crawler_name }}"
+
+# run the crawler
+glue_client = boto3.client('glue', region_name=region_name)
+glue_client.start_crawler(Name=crawler_name)
 
 # catalog: database and table names
 db_name = "{{ glue_database_name }}"
