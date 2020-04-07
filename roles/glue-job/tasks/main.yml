@@ -25,7 +25,7 @@
     state: present
     region: "{{ default_region }}"
     disable_rollback: true
-    template: "{{role_path}}/files/join_and_relationalize.py"
+    template: "{{role_path}}/files/glue-job.yaml"
     template_parameters:
       GlueIAMRole: "{{ glue_iam_role }}"
       JobScriptLocation: "{{ job_script_location }}"
