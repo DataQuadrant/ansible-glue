@@ -8,15 +8,26 @@ from pyspark.context import SparkContext
 from awsglue.context import GlueContext
 from awsglue.job import Job
 import boto3
+import time
 
 glueContext = GlueContext(SparkContext.getOrCreate())
 
 region_name = "{{ default_region }}"
 crawler_name = "{{ glue_crawler_name }}"
 
-# run the crawler
+# initiate the crawler
 glue_client = boto3.client('glue', region_name=region_name)
-glue_client.start_crawler(Name=crawler_name)
+response = glue_client.start_crawler(Name=crawler_name)
+
+# wait for the crawler to finish
+while True:
+    state=glue_client.get_crawler(Name=crawler_name)
+    status=state["Crawler"]
+    st=status['State']
+    if(st == 'RUNNING' or st == 'STOPPING'):
+        time.sleep(1)
+    else:
+        break
 
 # catalog: database and table names
 db_name = "{{ glue_database_name }}"
